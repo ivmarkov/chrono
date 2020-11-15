@@ -97,8 +97,10 @@ pub fn time_to_local_tm(sec: i64, tm: &mut Tm) {
                 -timezone
             }
         };
-        #[cfg(not(any(target_os = "solaris", target_os = "illumos")))]
+        #[cfg(not(any(target_os = "solaris", target_os = "illumos", target_vendor = "espressif")))]
         let gmtoff = out.tm_gmtoff;
+        #[cfg(target_vendor = "espressif")]
+        let gmtoff = 0; // TODO: Need to figure out a way to get the timezone offset
         tm_to_rust_tm(&out, gmtoff as i32, tm);
     }
 }
